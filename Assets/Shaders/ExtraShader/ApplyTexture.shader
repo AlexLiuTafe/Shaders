@@ -1,4 +1,4 @@
-﻿Shader "Lesson/OutLine"
+﻿Shader "Extra/ApplyTexture"
 {
     Properties
     {
@@ -15,7 +15,7 @@
 			FUNCTION DEFINES - defines the name for the vertex and fragment functions
 			-------------------------------------------------------------------------*/
 			#pragma vertex vert // Define for the building the shape function
-			#pragma fragment frag // Define for coloring functiom
+			#pragma fragment frag // Define for coloring function
 
 			/*--------------------------------------------------------------------------
 			INCLUDES
@@ -32,9 +32,9 @@
 				float2 uv : TEXCOORD0;//get the original coordinate
 			};
 
-			struct v2f // v2f(vertex to fragment) - for fragment data information
+			struct v2f // v2f(vertex to fragment) - for fragment data information (fragment is the pixel)
 			{
-				float4 pos : SV_POSITION //SV is for another platform (ex : PS3 platform)
+				float4 pos : SV_POSITION; //SV is for another platform (ex : PS3 platform)
 				float2 uv : TEXCOORD0;
 			};
 
@@ -53,8 +53,8 @@
 			{
 				v2f OUT;// new v2f struct for output
 
-				//Take the object from the object space into the camera clip space(make it appear on screen)
-				OUT.pos = UnityObjectToClipPos(IN.vertex); 
+				
+				OUT.pos = UnityObjectToClipPos(IN.vertex); //Take the object into the camera perspective
 				OUT.uv = IN.uv;
 
 				return OUT;
@@ -63,10 +63,10 @@
 			/*--------------------------------------------------------------------------
 			FRAGMENT FUNCTION - color it is in
 			--------------------------------------------------------------------------*/
-			fixed4 frag(v2f IN) : SV_Target //SV_Target is the color of the final thing
+			fixed4 frag(v2f IN) : SV_Target //is the color of the final thing
 			{
 				//Get the texture and wrap it around the object
-				float4 texColor = tex2d(_MainTex, IN.uv)
+				float4 texColor = tex2D(_MainTex, IN.uv);
 				return texColor * _Color;
 			}
 
